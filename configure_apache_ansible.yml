@@ -1,0 +1,77 @@
+---
+- name: Configure Apache with using Ansible
+  hosts: webservers
+
+  vars:
+    # Apache will listen on port 8080
+    http_port: 8080
+    admin: swiper
+    
+    # DocumentRoot set to custom dir content_dir
+    content_dir: /webcontent
+
+  tasks:
+
+    - name: Install Apache
+      yum:
+        name: httpd
+        state: present
+
+    - name: Enable service
+      service:
+        name: httpd
+        state: started
+        enabled: yes
+
+    - name: Configure firewall for port 8080 #We wil change the port to listen on 8080
+      firewalld:
+        port: 8080/tcp
+        permanent: yes
+        immediate: yes
+        state: enabled
+
+    - name: Create web directory
+      file:
+        path: /web_main
+        state: directory
+        mode: '2775'
+
+    - name: enable httpd cgi boolean
+      seboolean:
+        name: httpd_enable_cgi
+        state: true
+        persistent: true
+
+    - name: Update new directory Selinux Context
+      sefcontext:
+        target: '/web_main(/.*)?'
+        setype: httpd_sys_content_t
+        state: present
+
+    - name: All apache to listen on port 8080 updating selinux
+      seport:
+        ports: 8080
+        proto: tcp
+        setype: http_port_t
+        state: present
+
+    - name: Restore Context
+      command: restorecon -irv /web_main
+
+    - name: Push httpd.conf file using jinja2
+      template:
+        src: httpd.conf.j2
+        dest: /etc/httpd/conf/httpd.conf
+        backup: true
+      notify: restart apache
+
+    - name: Push custom index.txt using jinja2
+      template:
+        src: index.html.j2
+        dest: /web_main/index.html
+
+  handlers:
+    - name: restart apache
+      service:
+        name: httpd
+        state: restarted
