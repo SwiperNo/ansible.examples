@@ -1,0 +1,57 @@
+[rex@control apache]$ ansible-playbook configure_apache_ansible.yml
+
+PLAY [Configure Apache with using Ansible] ************************************************
+
+TASK [Gathering Facts] ********************************************************************
+ok: [ansible4]
+ok: [ansible3]
+
+TASK [Install Apache] *********************************************************************
+changed: [ansible4]
+changed: [ansible3]
+
+TASK [Enable service] *********************************************************************
+changed: [ansible4]
+changed: [ansible3]
+
+TASK [Configure firewall for port 8080] ***************************************************
+changed: [ansible4]
+changed: [ansible3]
+
+TASK [Create web directory] ***************************************************************
+changed: [ansible4]
+changed: [ansible3]
+
+TASK [enable httpd cgi boolean] ***********************************************************
+ok: [ansible3]
+ok: [ansible4]
+
+TASK [Update new directory Selinux Context] ***********************************************
+changed: [ansible3]
+changed: [ansible4]
+
+TASK [All apache to listen on port 8080 updating selinux] *********************************
+changed: [ansible4]
+changed: [ansible3]
+
+TASK [Restore Context] ********************************************************************
+changed: [ansible4]
+changed: [ansible3]
+
+TASK [Push httpd.conf file using jinja2] **************************************************
+changed: [ansible3]
+changed: [ansible4]
+
+TASK [Push custom index.txt using jinja2] *************************************************
+changed: [ansible3]
+changed: [ansible4]
+
+RUNNING HANDLER [restart apache] **********************************************************
+changed: [ansible3]
+changed: [ansible4]
+
+PLAY RECAP ********************************************************************************
+ansible3                   : ok=12   changed=10    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+ansible4                   : ok=12   changed=10    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+
