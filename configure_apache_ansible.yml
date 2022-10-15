@@ -8,7 +8,7 @@
     admin: swiper
     
     # DocumentRoot set to custom dir content_dir
-    content_dir: /webcontent
+    content_dir: /web_main
 
   tasks:
 
