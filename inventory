@@ -1,0 +1,15 @@
+[dev]
+ansible1
+
+[test]
+ansible2
+
+[prod]
+ansible3
+ansible4
+
+[balancers]
+ansible5
+
+[webservers:children]
+prod
